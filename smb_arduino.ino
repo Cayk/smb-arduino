@@ -12,6 +12,8 @@ char inSerial[50];
 char stat;
 int i=0;
 
+char rota[15] = "localizacao";
+char identificador[10] = "bike0007";
 char lon[15];
 char lat[15];
 char alt[15];
@@ -29,6 +31,8 @@ boolean gpsnc = true;
 int k;
 int j;
 int temp;
+int temp2;
+int temp3;
 
 void setup()
 {
@@ -53,10 +57,10 @@ void loop(){
     //serialhwread();
     //serialswread();
     
-    if( !gpsnc ){
+    //if( !gpsnc ){
       delay(10000);
       enviarMensagem();
-    }
+    //}
     delay(10000);
 }
 
@@ -85,27 +89,45 @@ void enviarMensagem(){
          
          k=0;
          j=1;
-         while(lat[k] != '\0'){
-           enviar[j] = lat[k];
+         while(rota[k] != '\0'){
+           enviar[j] = rota[k];
            k++;
            j++;
          }
          
-         Serial.println(j);
-         Serial.println(k);
-         enviar[j] = ':';
+         enviar[j] = '/';
+        
+         k=0;
          temp = j+1;
-         Serial.println(temp);
-         k =0;
-         while(lon[k] != '\0'){
-           enviar[temp] = lon[k];
+         while(identificador[k] != '\0'){
+           enviar[temp] = identificador[k];
            k++;
            temp++;
          }
-         enviar[temp] = '\0';
+         
+         enviar[temp] = ':';
+         
+         k=0;
+         temp2 = temp+1;
+         while(lat[k] != '\0'){
+           enviar[temp2] = lat[k];
+           k++;
+           temp2++;
+         }
+         
+         enviar[temp2] = ':';
+         
+         k =0;
+         temp3 = temp2+1;
+         while(lon[k] != '\0'){
+           enviar[temp3] = lon[k];
+           k++;
+           temp3++;
+         }
+         enviar[temp3] = '\0';
          Serial.println(enviar);
 
-         inet.httpGET("52.67.171.60", 3005, enviar, msg, 50);
+         inet.httpGET("35.161.237.63", 3000, enviar, msg, 50);
           
          Serial.println(F("terminei"));
          //inet.dettachGPRS();
